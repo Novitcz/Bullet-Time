@@ -1,0 +1,396 @@
+/* Bullet-time — btop-inspired timeline. Two renderers share these theme vars. */
+
+.bt-host {
+  --bt-bg: #12141a;
+  --bt-panel: #171a21;
+  --bt-border: #2a2f3a;
+  --bt-fg: #c8ccd4;
+  --bt-fg-dim: #7b828f;
+  --bt-grid: rgba(255, 255, 255, 0.04);
+  --bt-grid-week: rgba(255, 255, 255, 0.11);
+  --bt-weekend: rgba(255, 255, 255, 0.022);
+  --bt-today: #e5c07b;
+}
+
+.theme-light .bt-host {
+  --bt-bg: #f7f8fa;
+  --bt-panel: #ffffff;
+  --bt-border: #d9dce2;
+  --bt-fg: #2b2f38;
+  --bt-fg-dim: #8a909c;
+  --bt-grid: rgba(0, 0, 0, 0.05);
+  --bt-grid-week: rgba(0, 0, 0, 0.14);
+  --bt-weekend: rgba(0, 0, 0, 0.03);
+  --bt-today: #c98a00;
+}
+
+/* ------------------------------------------------------------------ *
+ * TUI (text-art) renderer                                            *
+ * ------------------------------------------------------------------ */
+
+/* Flex row: fixed label gutter + independently scrolling track. */
+.bt-tui-scroll {
+  display: flex;
+  align-items: flex-start;
+  /* background: var(--bt-bg); */
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+/* Label column: never scrolls (it lives outside the scroll box). Kept on top so
+ * its clean right edge covers the 1px overlap seam with the track. */
+.bt-tui-gutter {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Only the track scrolls horizontally; min-width:0 lets it shrink so overflow
+ * clips and scrolls instead of stretching the row. The -1px pulls the track
+ * under the gutter's edge so the character frame lines meet with no hairline
+ * gap (the boundary otherwise lands on a fractional pixel). The scrollbar is
+ * hidden so it can't break the frame; scroll via trackpad / shift+wheel / drag. */
+.bt-tui-track-scroll {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin-left: -1px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.bt-tui-track-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.bt-tui-track {
+  flex: 0 0 auto;
+}
+
+/* Reset theme styling on our <pre> panes. Obsidian and themes (e.g. Minimal)
+ * style code-block <pre> with padding, background, border, border-radius and
+ * `white-space: pre-wrap` via `.markdown-rendered pre` etc. Those outrank a
+ * plain `.bt-tui` (0,1,0) rule and would give each pane its own boxed
+ * background (a visible seam/"dent") and wrap the grid. !important guarantees
+ * our reset wins regardless of theme specificity, so the two panes read as one
+ * seamless surface. */
+.bt-tui-scroll .bt-tui {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  white-space: pre !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+}
+
+.bt-tui {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: var(--bt-fg);
+  font-family: var(
+    --font-monospace,
+    ui-monospace,
+    "SF Mono",
+    Menlo,
+    Consolas,
+    monospace
+  );
+  line-height: 1.18;
+  letter-spacing: 0;
+  white-space: pre;
+  tab-size: 4;
+  font-variant-ligatures: none;
+}
+
+.bt-tui .bt-faint {
+  color: var(--bt-fg-dim);
+  opacity: 0.85;
+}
+
+/* Dimmed bar segments (e.g. weekend days a workdays task spans but doesn't work).
+ * Lower opacity = more contrast against the solid bar. */
+.bt-tui .bt-faint-bar {
+  opacity: 0.3;
+}
+
+.bt-tui .bt-b {
+  font-weight: 700;
+  color: var(--bt-fg);
+}
+
+/* ------------------------------------------------------------------ *
+ * Graphical (bars) renderer                                          *
+ * ------------------------------------------------------------------ */
+
+.bt-bullet-time {
+  font-family: var(
+    --font-monospace,
+    ui-monospace,
+    "SF Mono",
+    Menlo,
+    Consolas,
+    monospace
+  );
+  font-size: 12px;
+  color: var(--bt-fg);
+  background: var(--bt-panel);
+  border: 1px solid var(--bt-border);
+  border-radius: 10px;
+  overflow: hidden;
+  line-height: 1.2;
+}
+
+.bt-title {
+  padding: 8px 12px 6px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--bt-fg);
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-scroll {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.bt-gutter {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  flex: 0 0 auto;
+  background: var(--bt-panel);
+  border-right: 1px solid var(--bt-border);
+}
+
+.bt-gutter-head {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 8px 6px;
+  border-bottom: 1px solid var(--bt-border);
+}
+
+.bt-mode-tag {
+  font-size: 10px;
+  color: var(--bt-fg-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bt-gutter-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.bt-lane-row {
+  font-weight: 600;
+  color: var(--bt-fg);
+}
+
+.bt-gutter-row .bt-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bt-lane-row .bt-label {
+  color: var(--bt-fg);
+}
+
+.bt-gutter-row:not(.bt-lane-row) .bt-label {
+  color: var(--bt-fg-dim);
+}
+
+.bt-dot {
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.bt-lane-row .bt-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+}
+
+.bt-canvas {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.bt-gridlines {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.bt-axis {
+  position: relative;
+  border-bottom: 1px solid var(--bt-border);
+  z-index: 2;
+}
+
+.bt-month {
+  position: absolute;
+  top: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--bt-fg);
+  padding-left: 3px;
+  white-space: nowrap;
+}
+
+.bt-week {
+  position: absolute;
+  bottom: 4px;
+  font-size: 10px;
+  color: var(--bt-fg-dim);
+  padding-left: 3px;
+  white-space: nowrap;
+}
+
+.bt-today {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed var(--bt-today);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.bt-today-badge {
+  position: absolute;
+  bottom: 2px;
+  transform: translateX(-50%);
+  background: var(--bt-today);
+  color: #1b1d23;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: 3px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.bt-rows {
+  position: relative;
+  z-index: 1;
+}
+
+.bt-trackrow {
+  position: relative;
+}
+
+.bt-lane-track {
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.theme-light .bt-lane-track {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0));
+}
+
+.bt-bar {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bt-bar-color) 88%, white),
+    var(--bt-bar-color)
+  );
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.bt-bar-overtime {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--bt-bar-color),
+    var(--bt-bar-color) 5px,
+    color-mix(in srgb, var(--bt-bar-color) 70%, black) 5px,
+    color-mix(in srgb, var(--bt-bar-color) 70%, black) 10px
+  );
+}
+
+.bt-bar-label {
+  padding: 0 6px;
+  font-size: 11px;
+  color: #0d0f14;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ *
+ * Full width: span the whole pane, ignoring "Readable line length"   *
+ * ------------------------------------------------------------------ */
+
+/* Obsidian centers block content into a narrow column when readable
+ * line length is on. Declare the full-pane scroll element as a size
+ * container so the timeline can measure and break out to its width. */
+.markdown-preview-view,
+.markdown-source-view .cm-scroller {
+  container: bt-pane / inline-size;
+}
+
+/* Opt in per block with the `wide` flag (marker or code-block header).
+ * Covers both entry points: the code block (.block-language-bullet-time)
+ * and the plain-list marker (a bare div), which share the .bt-host class. */
+.bt-host.bt-wide {
+  width: 100cqw;
+  max-width: 100cqw;
+  /* Cancel the auto side-margins of the centered text column so the
+	 * block aligns to the pane edges instead of the reading column. */
+  margin-inline: calc((100cqw - 100%) / -2);
+}
+
+/* The independent `center` flag centers the timeline within its block: it
+ * grows to its content, caps at the block width (then scrolls internally),
+ * and sits centered when narrower. Works with or without `wide`. */
+.bt-host.bt-center > .bt-bullet-time,
+.bt-host.bt-center > .bt-tui-scroll {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+/* ------------------------------------------------------------------ *
+ * Errors (shared)                                                    *
+ * ------------------------------------------------------------------ */
+
+.bt-errors {
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, #e06c75 14%, var(--bt-bg));
+  font-family: var(--font-monospace, ui-monospace, monospace);
+}
+
+.bt-errors-title {
+  font-weight: 600;
+  font-size: 11px;
+  color: #e06c75;
+  margin-bottom: 2px;
+}
+
+.bt-error {
+  font-size: 11px;
+  color: var(--bt-fg-dim);
+}
