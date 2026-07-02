@@ -1,11 +1,15 @@
 // Copies the built plugin into the Obsidian vault so it can be enabled/tested.
-// Override the destination vault with the BULLETTIME_VAULT env var if needed.
+// Set the destination vault with the BULLETTIME_VAULT env var.
 import { mkdirSync, copyFileSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const vault = process.env.BULLETTIME_VAULT || "/home/rv/Documents/RVault";
+const vault = process.env.BULLETTIME_VAULT;
+if (!vault) {
+  console.error('! BULLETTIME_VAULT is not set — e.g. BULLETTIME_VAULT="$HOME/MyVault" npm run deploy');
+  process.exit(1);
+}
 const dest = join(vault, ".obsidian", "plugins", "bullet-time");
 
 mkdirSync(dest, { recursive: true });

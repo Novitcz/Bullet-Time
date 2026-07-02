@@ -3,7 +3,8 @@
 	"name": "Bullet-time",
 	"version": "1.0.0",
 	"minAppVersion": "1.5.0",
-	"description": "Build elegant, minimal Gantt-style timelines from a simple bullet list. Track work tasks per lane with auto-scheduling, work-day math, and overtime highlighting.",
+	"description": "Turn a simple bullet list into a Gantt-style timeline with auto-scheduling, work-day math, and overtime highlighting.",
 	"author": "Herve Sliwa",
+	"authorUrl": "https://github.com/Novitcz",
 	"isDesktopOnly": false
 }

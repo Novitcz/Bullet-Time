@@ -11,7 +11,7 @@ Bullet-time is an Obsidian community plugin (TypeScript, bundled to `main.js` wi
 - `npm run dev` — esbuild in watch mode, rebuilds `main.js` on save (inline sourcemaps).
 - `npm run build` — typecheck (`tsc -noEmit`) then a minified production `main.js`.
 - `npm test` — bundles `test/harness.ts` to `test/harness.cjs` and runs the headless parser+scheduler checks. There is no test runner/framework; `test/harness.ts` is a single script of hand-rolled `check(name, cond)` assertions that exits non-zero on failure. Add a new numbered block to that file to add a test — there is no single-test filter.
-- `npm run deploy` — build, then copy `main.js`, `manifest.json`, `styles.css` into an Obsidian vault's plugin folder via `scripts/deploy.mjs`. Destination defaults to `/home/rv/Documents/RVault`; override with the `BULLETTIME_VAULT` env var. After deploy you must reload/re-enable the plugin in Obsidian.
+- `npm run deploy` — build, then copy `main.js`, `manifest.json`, `styles.css` into an Obsidian vault's plugin folder via `scripts/deploy.mjs`. Set the destination vault with the `BULLETTIME_VAULT` env var (required). After deploy you must reload/re-enable the plugin in Obsidian.
 
 ## Architecture
 
