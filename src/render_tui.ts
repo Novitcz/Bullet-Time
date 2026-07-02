@@ -22,36 +22,37 @@ interface Cell {
 	bold?: boolean;
 }
 
-function esc(s: string): string {
-	return s.replace(/[&<>]/g, (c) => (c === "&" ? "&amp;" : c === "<" ? "&lt;" : "&gt;"));
-}
-
 function sameStyle(a: Cell, b: Cell): boolean {
 	return a.color === b.color && !!a.faint === !!b.faint && !!a.bold === !!b.bold;
 }
 
-/** Serialize a row of cells to HTML, merging adjacent cells that share a style. */
-function rowHtml(cells: Cell[]): string {
-	let out = "";
-	let i = 0;
-	while (i < cells.length) {
-		const c = cells[i];
-		let j = i + 1;
-		while (j < cells.length && sameStyle(cells[j], c)) j++;
-		const text = esc(cells.slice(i, j).map((x) => x.ch).join(""));
-		if (!c.color && !c.faint && !c.bold) {
-			out += text;
-		} else {
-			// Colored faint cells are dimmed bars (weekend gaps); the color style would
-			// otherwise override bt-faint's dim color, so give them a stronger opacity class.
-			const faintCls = c.faint ? (c.color ? "bt-faint-bar" : "bt-faint") : "";
-			const cls = [faintCls, c.bold ? "bt-b" : ""].filter(Boolean).join(" ");
-			const style = c.color ? ` style="color:${c.color}"` : "";
-			out += `<span${cls ? ` class="${cls}"` : ""}${style}>${text}</span>`;
+/** Append rows of cells to `pre` as text/`<span>` nodes, merging adjacent cells
+ * that share a style. Rows are separated by newline text nodes. */
+function appendRows(pre: HTMLElement, rows: Cell[][]): void {
+	rows.forEach((cells, rowIdx) => {
+		if (rowIdx > 0) pre.appendChild(document.createTextNode("\n"));
+		let i = 0;
+		while (i < cells.length) {
+			const c = cells[i];
+			let j = i + 1;
+			while (j < cells.length && sameStyle(cells[j], c)) j++;
+			const text = cells.slice(i, j).map((x) => x.ch).join("");
+			if (!c.color && !c.faint && !c.bold) {
+				pre.appendChild(document.createTextNode(text));
+			} else {
+				// Colored faint cells are dimmed bars (weekend gaps); the color style would
+				// otherwise override bt-faint's dim color, so give them a stronger opacity class.
+				const faintCls = c.faint ? (c.color ? "bt-faint-bar" : "bt-faint") : "";
+				const cls = [faintCls, c.bold ? "bt-b" : ""].filter(Boolean).join(" ");
+				const span = document.createElement("span");
+				if (cls) span.className = cls;
+				if (c.color) span.style.color = c.color;
+				span.textContent = text;
+				pre.appendChild(span);
+			}
+			i = j;
 		}
-		i = j;
-	}
-	return out;
+	});
 }
 
 function blank(w: number): Cell[] {
@@ -76,7 +77,7 @@ function truncate(label: string, max: number): string {
 function buildGrid(
 	schedule: Schedule,
 	settings: BulletTimeSettings
-): { left: string; right: string } {
+): { left: Cell[][]; right: Cell[][] } {
 	const layout = buildLayout(schedule);
 	const cpd = Math.max(1, Math.min(4, Math.round(settings.cellsPerDay)));
 	const cols = layout.totalDays * cpd;
@@ -209,9 +210,10 @@ function buildGrid(
 	// Split index lands just before the first track column (content index `base`,
 	// which is frame index `base + 2`).
 	const split = base + 2;
-	const left = full.map((row) => rowHtml(row.slice(0, split))).join("\n");
-	const right = full.map((row) => rowHtml(row.slice(split))).join("\n");
-	return { left, right };
+	return {
+		left: full.map((row) => row.slice(0, split)),
+		right: full.map((row) => row.slice(split)),
+	};
 }
 
 export function renderTui(
@@ -229,16 +231,17 @@ export function renderTui(
 
 	const gutter = document.createElement("pre");
 	gutter.className = "bt-tui bt-tui-gutter";
-	gutter.style.fontSize = `${settings.fontSize}px`;
-	gutter.innerHTML = left;
+	appendRows(gutter, left);
 
 	const trackScroll = document.createElement("div");
 	trackScroll.className = "bt-tui-track-scroll";
 	const track = document.createElement("pre");
 	track.className = "bt-tui bt-tui-track";
-	track.style.fontSize = `${settings.fontSize}px`;
-	track.innerHTML = right;
+	appendRows(track, right);
 	trackScroll.appendChild(track);
+
+	// Font size is the only dynamic style; feed it through a CSS variable.
+	scroll.style.setProperty("--bt-tui-font-size", `${settings.fontSize}px`);
 
 	scroll.appendChild(gutter);
 	scroll.appendChild(trackScroll);

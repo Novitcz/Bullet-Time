@@ -82,6 +82,7 @@
   white-space: pre !important;
   word-break: normal !important;
   overflow-wrap: normal !important;
+  font-size: var(--bt-tui-font-size, 13px) !important;
 }
 
 .bt-tui {
@@ -211,6 +212,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
+  background: var(--bt-dot-color);
 }
 
 .bt-lane-row .bt-dot {

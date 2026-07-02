@@ -96,7 +96,7 @@ export function renderBars(
 		g.style.height = `${rh}px`;
 		g.style.paddingLeft = `${8 + row.depth * 14}px`;
 		const dot = el("span", "bt-dot", g);
-		dot.style.background = row.color;
+		dot.style.setProperty("--bt-dot-color", row.color);
 		const name = el("span", "bt-label", g);
 		name.textContent = row.label;
 	}
