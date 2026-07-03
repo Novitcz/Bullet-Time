@@ -17,17 +17,6 @@ You write an ordinary indented list; Bullet-time reads it top-to-bottom, chains 
 - **Two entry points** — a fenced ` ```bullet-time ` code block, or a plain bullet list tagged with a hidden `%% bullet-time %%` comment.
 - **Errors render inline** — bad input never breaks your note; problems show up in a small box under the timeline.
 
-## Screenshots
-
-<!--
-  TODO before submitting to the community plugin directory:
-  drop a screenshot into docs/ and uncomment the line below.
-  Suggested capture (from a real vault, default theme):
-    docs/screenshot-tui.png — a rendered timeline
-
-![Bullet-time timeline](docs/screenshot-tui.png)
--->
-
 ## Installation
 
 ### Community plugin store
