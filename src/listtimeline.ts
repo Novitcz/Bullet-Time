@@ -90,7 +90,7 @@ export function processListTimelines(
 		const listText = bodyLines.join("\n");
 		const source = headers ? headers + "\n" + listText : listText;
 
-		const container = document.createElement("div");
+		const container = ul.ownerDocument.createElement("div");
 		renderBulletTime(source, container, settings);
 		ul.replaceWith(container);
 	}

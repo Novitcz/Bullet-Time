@@ -37,14 +37,14 @@
  * clips and scrolls instead of stretching the row. The -1px pulls the track
  * under the gutter's edge so the character frame lines meet with no hairline
  * gap (the boundary otherwise lands on a fractional pixel). The scrollbar is
- * hidden so it can't break the frame; scroll via trackpad / shift+wheel / drag. */
+ * hidden (via the ::-webkit-scrollbar rule, which covers Obsidian's Electron)
+ * so it can't break the frame; scroll via trackpad / shift+wheel / drag. */
 .bt-tui-track-scroll {
   flex: 1 1 auto;
   min-width: 0;
   margin-left: -1px;
   overflow-x: auto;
   overflow-y: hidden;
-  scrollbar-width: none;
 }
 .bt-tui-track-scroll::-webkit-scrollbar {
   display: none;
@@ -58,19 +58,20 @@
  * style code-block <pre> with padding, background, border, border-radius and
  * `white-space: pre-wrap` via `.markdown-rendered pre` etc. Those outrank a
  * plain `.bt-tui` (0,1,0) rule and would give each pane its own boxed
- * background (a visible seam/"dent") and wrap the grid. !important guarantees
- * our reset wins regardless of theme specificity, so the two panes read as one
- * seamless surface. */
-.bt-tui-scroll .bt-tui {
-  margin: 0 !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  white-space: pre !important;
-  word-break: normal !important;
-  overflow-wrap: normal !important;
-  font-size: var(--bt-tui-font-size, 13px) !important;
+ * background (a visible seam/"dent") and wrap the grid. This selector's
+ * specificity (0,3,1) outranks typical theme rules, and plugin CSS loads
+ * after theme CSS so ties also resolve in our favor — the two panes read as
+ * one seamless surface. */
+.bt-host .bt-tui-scroll pre.bt-tui {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  font-size: var(--bt-tui-font-size, 13px);
 }
 
 .bt-tui {
@@ -79,14 +80,8 @@
   background: transparent;
   border: none;
   color: var(--bt-fg);
-  font-family: var(
-    --font-monospace,
-    ui-monospace,
-    "SF Mono",
-    Menlo,
-    Consolas,
-    monospace
-  );
+  /* --font-monospace is always defined by Obsidian; the rest is a safety net. */
+  font-family: var(--font-monospace, monospace);
   line-height: 1.18;
   letter-spacing: 0;
   white-space: pre;
@@ -151,7 +146,7 @@
   padding: 6px 10px;
   border-radius: 6px;
   background: color-mix(in srgb, #e06c75 14%, var(--bt-bg));
-  font-family: var(--font-monospace, ui-monospace, monospace);
+  font-family: var(--font-monospace, monospace);
 }
 
 .bt-errors-title {

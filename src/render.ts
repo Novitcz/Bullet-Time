@@ -7,14 +7,16 @@ import { renderTui } from "./render_tui";
 import { BlockConfig, BulletTimeSettings } from "./types";
 
 function renderErrors(container: HTMLElement, messages: string[]): void {
-	const box = document.createElement("div");
+	// The container's own document, so rendering works in popout windows too.
+	const doc = container.ownerDocument;
+	const box = doc.createElement("div");
 	box.className = "bt-errors";
-	const title = document.createElement("div");
+	const title = doc.createElement("div");
 	title.className = "bt-errors-title";
 	title.textContent = "Bullet-time";
 	box.appendChild(title);
 	for (const m of messages) {
-		const line = document.createElement("div");
+		const line = doc.createElement("div");
 		line.className = "bt-error";
 		line.textContent = m;
 		box.appendChild(line);

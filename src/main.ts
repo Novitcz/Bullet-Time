@@ -59,8 +59,8 @@ export default class BulletTimePlugin extends Plugin {
 	}
 
 	async loadSettings(): Promise<void> {
-		const data = await this.loadData();
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+		const data = (await this.loadData()) as Partial<BulletTimeSettings> | null;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, data ?? {});
 		// Never let a corrupt/empty palette slip through.
 		if (!Array.isArray(this.settings.palette) || this.settings.palette.length === 0) {
 			this.settings.palette = [...DEFAULT_SETTINGS.palette];

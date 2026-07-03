@@ -21,7 +21,6 @@ export class BulletTimeSettingTab extends PluginSettingTab {
 				sl
 					.setLimits(min, max, 1)
 					.setValue(s[key])
-					.setDynamicTooltip()
 					.onChange(async (v) => {
 						s[key] = v;
 						await this.plugin.saveAndRefresh();

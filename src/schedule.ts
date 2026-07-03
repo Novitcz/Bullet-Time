@@ -144,7 +144,7 @@ function scheduleNode(
 	const explicit = parseStart(node.startRaw);
 	if (explicit === null) ctx.errors.push(`Line ${node.line}: invalid start date "${node.startRaw}".`);
 	const pinned = explicit instanceof Date;
-	const anchor = pinned ? (explicit as Date) : cursor;
+	const anchor = pinned ? explicit : cursor;
 
 	const durParsed = parseDuration(node.durationRaw, ctx.cfg);
 	if (durParsed === null)

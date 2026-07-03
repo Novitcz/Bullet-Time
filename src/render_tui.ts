@@ -29,8 +29,10 @@ function sameStyle(a: Cell, b: Cell): boolean {
 /** Append rows of cells to `pre` as text/`<span>` nodes, merging adjacent cells
  * that share a style. Rows are separated by newline text nodes. */
 function appendRows(pre: HTMLElement, rows: Cell[][]): void {
+	// Create nodes from the host element's document so popout windows work.
+	const doc = pre.ownerDocument;
 	rows.forEach((cells, rowIdx) => {
-		if (rowIdx > 0) pre.appendChild(document.createTextNode("\n"));
+		if (rowIdx > 0) pre.appendChild(doc.createTextNode("\n"));
 		let i = 0;
 		while (i < cells.length) {
 			const c = cells[i];
@@ -38,13 +40,13 @@ function appendRows(pre: HTMLElement, rows: Cell[][]): void {
 			while (j < cells.length && sameStyle(cells[j], c)) j++;
 			const text = cells.slice(i, j).map((x) => x.ch).join("");
 			if (!c.color && !c.faint && !c.bold) {
-				pre.appendChild(document.createTextNode(text));
+				pre.appendChild(doc.createTextNode(text));
 			} else {
 				// Colored faint cells are dimmed bars (weekend gaps); the color style would
 				// otherwise override bt-faint's dim color, so give them a stronger opacity class.
 				const faintCls = c.faint ? (c.color ? "bt-faint-bar" : "bt-faint") : "";
 				const cls = [faintCls, c.bold ? "bt-b" : ""].filter(Boolean).join(" ");
-				const span = document.createElement("span");
+				const span = doc.createElement("span");
 				if (cls) span.className = cls;
 				if (c.color) span.style.color = c.color;
 				span.textContent = text;
@@ -222,20 +224,21 @@ export function renderTui(
 	settings: BulletTimeSettings
 ): void {
 	const { left, right } = buildGrid(schedule, settings);
+	const doc = container.ownerDocument;
 
 	// The label gutter lives outside the scroll box so it can't scroll away; only
 	// the track gets its own horizontal scroller. Same font/line-height keeps the
 	// two panes row-aligned.
-	const scroll = document.createElement("div");
+	const scroll = doc.createElement("div");
 	scroll.className = "bt-tui-scroll";
 
-	const gutter = document.createElement("pre");
+	const gutter = doc.createElement("pre");
 	gutter.className = "bt-tui bt-tui-gutter";
 	appendRows(gutter, left);
 
-	const trackScroll = document.createElement("div");
+	const trackScroll = doc.createElement("div");
 	trackScroll.className = "bt-tui-track-scroll";
-	const track = document.createElement("pre");
+	const track = doc.createElement("pre");
 	track.className = "bt-tui bt-tui-track";
 	appendRows(track, right);
 	trackScroll.appendChild(track);
