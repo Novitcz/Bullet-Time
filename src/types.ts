@@ -3,7 +3,6 @@
 
 export type DayModel = "calendar" | "workdays";
 export type WeekStart = "mon" | "sun";
-export type RenderMode = "tui" | "bars";
 
 /** Effective configuration for a single ```bullet-time block. */
 export interface BlockConfig {
@@ -60,16 +59,9 @@ export interface BulletTimeSettings {
 	dayModel: DayModel;
 	weekStart: WeekStart;
 	hoursPerDay: number;
-	renderMode: RenderMode; // "tui" = monospace text art, "bars" = graphical CSS bars
-	// TUI (text-art) appearance
 	cellsPerDay: number; // character columns per calendar day (horizontal zoom)
 	fontSize: number; // px, for the monospace grid
 	showRuler: boolean; // draw the month/week date ruler
-	// Graphical (bars) appearance
-	dayWidth: number; // px per calendar day
-	rowHeight: number; // px per task row
-	gutterWidth: number; // px for the label gutter
-	// Shared
 	palette: string[]; // lane colors assigned in order when none is specified
 	overtimeColor: string;
 }
@@ -89,13 +81,9 @@ export const DEFAULT_SETTINGS: BulletTimeSettings = {
 	dayModel: "calendar",
 	weekStart: "mon",
 	hoursPerDay: 8,
-	renderMode: "tui",
 	cellsPerDay: 2,
 	fontSize: 13,
 	showRuler: true,
-	dayWidth: 26,
-	rowHeight: 26,
-	gutterWidth: 150,
 	palette: DEFAULT_PALETTE,
 	overtimeColor: "#e06c75",
 };

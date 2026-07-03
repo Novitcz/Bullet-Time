@@ -1,9 +1,8 @@
-// Entry point for a bullet-time code block: parse + schedule once, then delegate to
-// the chosen renderer (monospace text art or graphical bars).
+// Entry point for a bullet-time code block: parse + schedule once, then render
+// as monospace text art.
 
 import { parseBulletTime } from "./parser";
 import { scheduleBlock } from "./schedule";
-import { renderBars } from "./render_bars";
 import { renderTui } from "./render_tui";
 import { BlockConfig, BulletTimeSettings } from "./types";
 
@@ -42,8 +41,7 @@ export function renderBulletTime(
 		container.classList.toggle("bt-wide", !!parsed.config.wide);
 		container.classList.toggle("bt-center", !!parsed.config.center);
 		const schedule = scheduleBlock(parsed, settings.palette, settings.overtimeColor);
-		if (settings.renderMode === "bars") renderBars(schedule, container, settings);
-		else renderTui(schedule, container, settings);
+		renderTui(schedule, container, settings);
 		if (schedule.errors.length) renderErrors(container, schedule.errors);
 	} catch (e) {
 		renderErrors(container, [`Unexpected error: ${(e as Error).message}`]);

@@ -2,12 +2,11 @@
 
 Build elegant, minimal Gantt-style timelines from a simple bullet list in [Obsidian](https://obsidian.md). Track work per lane with auto-scheduling, work-day math, and overtime highlighting.
 
-You write an ordinary indented list; Bullet-time reads it top-to-bottom, chains each task after the one before it, and draws a timeline — as clean monospace text art, or as graphical CSS bars.
+You write an ordinary indented list; Bullet-time reads it top-to-bottom, chains each task after the one before it, and draws a timeline as clean monospace text art.
 
 ## Features
 
 - **Auto-scheduling** — siblings chain automatically: each task starts where the previous one ended. Only pin the dates that actually matter.
-- **Two render modes** — `tui` (monospace character-grid art) or `bars` (graphical bars on a day grid with a sticky label gutter).
 - **Work-day math** — schedule in `calendar` days or `workdays` mode, which skips weekends.
 - **Duration shorthands** — days, weeks, or hours (`3d`, `2w`, `4h`).
 - **Overtime highlighting** — when a project's children run past its planned total, the overflow is flagged in a warning color.
@@ -20,14 +19,11 @@ You write an ordinary indented list; Bullet-time reads it top-to-bottom, chains 
 
 <!--
   TODO before submitting to the community plugin directory:
-  drop two screenshots into docs/ and uncomment the lines below.
-  Suggested captures (from a real vault, default theme):
-    docs/screenshot-bars.png — a timeline in `bars` mode
-    docs/screenshot-tui.png  — the same timeline in `tui` mode
+  drop a screenshot into docs/ and uncomment the line below.
+  Suggested capture (from a real vault, default theme):
+    docs/screenshot-tui.png — a rendered timeline
 
-![Bars mode](docs/screenshot-bars.png)
-
-![TUI mode](docs/screenshot-tui.png)
+![Bullet-time timeline](docs/screenshot-tui.png)
 -->
 
 ## Installation
@@ -109,11 +105,9 @@ Tasks with no explicit start chain after their previous sibling. A pinned start 
 
 Configure global defaults under *Settings → Bullet-time* (any block can override the schedule-related ones via header lines):
 
-- **Render mode** — `tui` or `bars`
 - **Day model** — `calendar` or `workdays`
 - **Week start**, **hours per day**
-- **TUI appearance** — cells per day (zoom), font size, month/week ruler toggle
-- **Bars appearance** — day width, row height, label gutter width
+- **Appearance** — cells per day (zoom), font size, month/week ruler toggle
 - **Palette** — lane colors assigned in order when none is specified, plus the overtime color
 
 ## Development

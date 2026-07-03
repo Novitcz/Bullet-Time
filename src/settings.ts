@@ -1,8 +1,8 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
 import type BulletTimePlugin from "./main";
-import { DEFAULT_PALETTE, BulletTimeSettings } from "./types";
+import { DEFAULT_PALETTE } from "./types";
 
-type NumericKey = "cellsPerDay" | "fontSize" | "dayWidth" | "rowHeight" | "gutterWidth";
+type NumericKey = "cellsPerDay" | "fontSize";
 
 export class BulletTimeSettingTab extends PluginSettingTab {
 	plugin: BulletTimePlugin;
@@ -33,23 +33,6 @@ export class BulletTimeSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 		const s = this.plugin.settings;
-
-		new Setting(containerEl).setName("Rendering").setHeading();
-
-		new Setting(containerEl)
-			.setName("Render style")
-			.setDesc("How timelines are drawn. Changing this re-renders open notes.")
-			.addDropdown((d) =>
-				d
-					.addOption("tui", "Text art (TUI)")
-					.addOption("bars", "Graphical bars")
-					.setValue(s.renderMode)
-					.onChange(async (v) => {
-						s.renderMode = v as BulletTimeSettings["renderMode"];
-						await this.plugin.saveAndRefresh();
-						this.display(); // swap the appearance controls below
-					})
-			);
 
 		new Setting(containerEl).setName("Defaults").setHeading();
 
@@ -96,23 +79,17 @@ export class BulletTimeSettingTab extends PluginSettingTab {
 
 		new Setting(containerEl).setName("Appearance").setHeading();
 
-		if (s.renderMode === "tui") {
-			this.slider("Cells per day", "Character columns per day (horizontal zoom).", "cellsPerDay", 1, 4);
-			this.slider("Font size", "Monospace grid font size (px).", "fontSize", 9, 20);
-			new Setting(containerEl)
-				.setName("Show date ruler")
-				.setDesc("Draw the month names and week-start day numbers above the bars.")
-				.addToggle((t) =>
-					t.setValue(s.showRuler).onChange(async (v) => {
-						s.showRuler = v;
-						await this.plugin.saveAndRefresh();
-					})
-				);
-		} else {
-			this.slider("Day width", "Pixels per day (horizontal zoom).", "dayWidth", 8, 60);
-			this.slider("Row height", "Pixels per task row.", "rowHeight", 16, 48);
-			this.slider("Label gutter width", "Width of the left label column.", "gutterWidth", 90, 320);
-		}
+		this.slider("Cells per day", "Character columns per day (horizontal zoom).", "cellsPerDay", 1, 4);
+		this.slider("Font size", "Monospace grid font size (px).", "fontSize", 9, 20);
+		new Setting(containerEl)
+			.setName("Show date ruler")
+			.setDesc("Draw the month names and week-start day numbers above the bars.")
+			.addToggle((t) =>
+				t.setValue(s.showRuler).onChange(async (v) => {
+					s.showRuler = v;
+					await this.plugin.saveAndRefresh();
+				})
+			);
 
 		new Setting(containerEl)
 			.setName("Overtime color")
