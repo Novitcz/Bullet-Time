@@ -1,6 +1,7 @@
 # Bullet-time
 
-Build elegant, minimal Gantt-style timelines from a simple bullet list in [Obsidian](https://obsidian.md). Track work per lane with auto-scheduling, work-day math, and overtime highlighting.
+Minimal timelines from a simple bullet list in [Obsidian](https://obsidian.md).
+<img width="1027" height="361" alt="image" src="https://github.com/user-attachments/assets/98bc581d-0937-4ae6-a282-fd074c5fe062" />
 
 You write an ordinary indented list; Bullet-time reads it top-to-bottom, chains each task after the one before it, and draws a timeline as clean monospace text art.
 
