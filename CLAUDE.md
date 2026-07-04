@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 An Obsidian community plugin ("Bullet-time", id `bullet-time`) that renders Gantt-style timelines from indented bullet lists. TypeScript, bundled with esbuild, no runtime dependencies beyond the Obsidian API.
 
+**This plugin is now officially listed in the Obsidian community plugin directory.** Changes must stay compliant with Obsidian's plugin guidelines and developer policies — run the `obsidian-compliance` skill on pending changes before committing.
+
 ## Commands
 
 ```bash

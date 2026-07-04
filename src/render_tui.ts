@@ -7,6 +7,7 @@ import { Schedule, BulletTimeSettings } from "./types";
 
 const CH = {
 	bar: "█",
+	barWeekend: "■",
 	over: "▓",
 	sep: "│",
 	today: "┊",
@@ -142,9 +143,9 @@ function buildGrid(
 
 		// Gutter label.
 		if (row.isLane) {
-			put(cells, 0, truncate(row.label, gutterW), { bold: true });
+			put(cells, 0, truncate(row.label, gutterW), { bold: true, color: row.color });
 		} else {
-			put(cells, row.depth, truncate(row.label, gutterW - row.depth), {});
+			put(cells, row.depth, truncate(row.label, gutterW - row.depth), { color: row.color });
 		}
 
 		// Week separators (faint) across the track.
@@ -168,7 +169,7 @@ function buildGrid(
 				if (c < base) continue;
 				const faint = faintBarWeekends && weekendCols.has(c);
 				if (ot >= 0 && c >= ot) cells[c] = { ch: CH.over, color: settings.overtimeColor, faint };
-				else cells[c] = { ch: CH.bar, color: row.color, faint };
+				else cells[c] = { ch: faint ? CH.barWeekend : CH.bar, color: row.color, faint };
 			}
 		}
 
