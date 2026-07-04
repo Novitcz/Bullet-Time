@@ -4,10 +4,13 @@ Minimal timelines from a simple bullet list in [Obsidian](https://obsidian.md).
 
 <img width="1027" height="361" alt="image" src="https://github.com/user-attachments/assets/98bc581d-0937-4ae6-a282-fd074c5fe062" />
 
-You write a list; Bullet-time reads it top-to-bottom, chains each task after the one before it, and draws a timeline as clean monospace text art.
+
+You write a list, add duration estimate {Days}, and Bullet-time reads it top-to-bottom, chains each task after the one before it, and transforms it into a clean monospace text art timeline.
+
+<img width="1155" height="326" alt="image" src="https://github.com/user-attachments/assets/97bea0eb-6ef1-4ac1-a172-39e46db86515" />
+
 
 ## Features
-
 - **Auto-scheduling** — siblings chain automatically: each task starts where the previous one ended. Only pin the dates that actually matter.
 - **Work-day math** — schedule in `calendar` days or `workdays` mode, which skips weekends.
 - **Duration shorthands** — days, weeks, or hours (`3d`, `2w`, `4h`).
