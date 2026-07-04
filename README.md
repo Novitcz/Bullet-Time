@@ -22,7 +22,7 @@ You write a list, add duration estimate {Days}, and Bullet-time reads it top-to-
 
 ### Community plugin store
 
-_Pending review — once accepted, install it from_ Settings → Community plugins → Browse _by searching for "Bullet-time"._
+Install it from_ Settings → Community plugins → Browse _by searching for "Bullet-time"._
 
 ### Manual
 
