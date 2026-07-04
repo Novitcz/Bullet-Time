@@ -2,7 +2,7 @@
 
 Minimal timelines from a simple bullet list in [Obsidian](https://obsidian.md).
 
-<img width="1027" height="361" alt="image" src="https://github.com/user-attachments/assets/98bc581d-0937-4ae6-a282-fd074c5fe062" />
+<img src="https://github.com/user-attachments/assets/98bc581d-0937-4ae6-a282-fd074c5fe062" />
 
 
 You write a list, add duration estimate {Days}, and Bullet-time reads it top-to-bottom, chains each task after the one before it, and transforms it into a clean monospace text art timeline.
